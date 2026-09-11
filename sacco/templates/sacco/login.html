@@ -163,24 +163,6 @@
         font-weight: 600;
     }
 
-    /* Error message */
-    .login-card .alert-error {
-        background: rgba(185, 28, 28, 0.06);
-        border-left: 4px solid #B91C1C;
-        color: #991B1B;
-        padding: 12px 16px;
-        border-radius: var(--radius-sm);
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 0.9rem;
-    }
-
-    .login-card .alert-error i {
-        font-size: 1.1rem;
-    }
-
     /* Mobile adjustments */
     @media (max-width: 480px) {
         .page-layout {
@@ -221,13 +203,6 @@
         <h2>Welcome Back</h2>
         <p>Sign in to your account</p>
     </div>
-
-    {% if error %}
-        <div class="alert-error">
-            <i class="fas fa-exclamation-circle"></i>
-            {{ error }}
-        </div>
-    {% endif %}
 
     <form action="{% url 'login' %}" method="post">
         {% csrf_token %}

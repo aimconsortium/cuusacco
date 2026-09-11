@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +13,9 @@
 
     <!-- Font Awesome 6 (free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <!-- Notyf (self-hosted) -->
+    <link rel="stylesheet" href="{% static 'sacco/vendor/notyf/notyf.min.css' %}" />
 
     <style>
         /* ============================================================
@@ -661,46 +665,6 @@
         }
 
         /* ============================================================
-               DJANGO MESSAGES / ALERTS
-               ============================================================ */
-        .messages {
-            margin-bottom: 20px;
-        }
-
-        .messages .alert {
-            padding: 16px 20px;
-            border-radius: var(--radius-sm);
-            font-weight: 500;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-left: 4px solid transparent;
-            background: var(--card-bg);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .messages .alert-success {
-            border-left-color: #2E7D32;
-            color: #1A4A1A;
-        }
-
-        .messages .alert-error {
-            border-left-color: #C62828;
-            color: #8E1A1A;
-        }
-
-        .messages .alert-info {
-            border-left-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .messages .alert-warning {
-            border-left-color: #F9A825;
-            color: #6D4C00;
-        }
-
-        /* ============================================================
                PASSWORD VISIBILITY TOGGLE
                ============================================================ */
         .password-wrapper {
@@ -796,14 +760,9 @@
         <!-- MAIN CONTENT -->
         <main class="main-content">
             {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% elif message.tags == 'info' %}fa-info-circle{% else %}fa-warning{% endif %}"></i>
-                    {{ message }}
-                </div>
-                {% endfor %}
-            </div>
+            <script id="django-messages" type="application/json">
+                [{% for message in messages %}{"tags": "{{ message.tags|escapejs }}", "text": "{{ message|escapejs }}"}{% if not forloop.last %},{% endif %}{% endfor %}]
+            </script>
             {% endif %}
 
             {% block content %}
@@ -864,7 +823,34 @@
     <!-- ============================================================
     SCRIPTS
     ============================================================ -->
+    <script src="{% static 'sacco/vendor/notyf/notyf.min.js' %}"></script>
     <script>
+        const notyf = new Notyf({
+            duration: 4000,
+            position: { x: 'right', y: 'top' },
+            types: [
+                { type: 'info', background: '#0B1E4E' },
+                { type: 'warning', background: '#F9A825' },
+            ],
+        });
+
+        (function() {
+            const el = document.getElementById('django-messages');
+            if (!el) return;
+            const msgs = JSON.parse(el.textContent);
+            msgs.forEach(function(msg) {
+                if (msg.tags.includes('error')) {
+                    notyf.error(msg.text);
+                } else if (msg.tags.includes('warning')) {
+                    notyf.open({ type: 'warning', message: msg.text });
+                } else if (msg.tags.includes('info')) {
+                    notyf.open({ type: 'info', message: msg.text });
+                } else {
+                    notyf.success(msg.text);
+                }
+            });
+        })();
+
         function togglePasswordVisibility(btn) {
             const input = btn.parentElement.querySelector('input');
             const icon = btn.querySelector('i');
