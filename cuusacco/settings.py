@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['.pythonanywhere.com', 'localhost', '127.0.0.1']
 
+CSRF_TRUSTED_ORIGINS = ['https://*.pythonanywhere.com']
+
 
 # Application definition
 
