@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Cavendish University Sacco{% endblock %}</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <style>
+        /* ============================================================
+               GLOBAL RESET & BASE
+               ============================================================ */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0B1E4E;        /* Deep navy blue */
+            --primary-dark: #08163A;
+            --primary-light: #2A4A7F;
+            --primary-lighter: #4A7ABF;
+            --secondary: #E2A829;      /* Warm gold accent (optional) */
+            --secondary-light: #F0C96A;
+            --accent: #4A7ABF;
+            --bg: #F4F7FC;            /* Very light blue-white */
+            --card-bg: #FFFFFF;
+            --text-primary: #0B1E4E;
+            --text-secondary: #1F3A6B;
+            --text-muted: #5A6F94;
+            --shadow-sm: 0 4px 20px rgba(11, 30, 78, 0.06);
+            --shadow-md: 0 12px 40px rgba(11, 30, 78, 0.10);
+            --shadow-lg: 0 24px 60px rgba(11, 30, 78, 0.16);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --header-height: 76px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* ============================================================
+               SCROLLBAR
+               ============================================================ */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* ============================================================
+               HEADER / NAVBAR – dark blue background, white text
+               ============================================================ */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--primary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+            box-shadow: 0 2px 20px rgba(11, 30, 78, 0.20);
+        }
+
+        header .container {
+            width: 94%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        /* Branding */
+        #branding {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        #branding .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        #branding h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #fff;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        #branding h1 .highlight {
+            color: #FFD966; /* soft gold */
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        nav ul li a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.75);
+            transition: var(--transition);
+            letter-spacing: 0.01em;
+            position: relative;
+        }
+
+        nav ul li a i {
+            font-size: 0.95rem;
+            opacity: 0.7;
+            transition: var(--transition);
+        }
+
+        nav ul li a:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        nav ul li a:hover i {
+            opacity: 1;
+        }
+
+        nav ul li a.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+        }
+
+        /* Auth buttons – gold accent or white outline */
+        nav ul li a.auth-btn {
+            background: #FFD966;
+            color: var(--primary) !important;
+            font-weight: 600;
+            padding: 8px 24px;
+            box-shadow: 0 4px 16px rgba(255, 217, 102, 0.3);
+        }
+
+        nav ul li a.auth-btn i {
+            color: var(--primary);
+            opacity: 1;
+        }
+
+        nav ul li a.auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(255, 217, 102, 0.4);
+            background: #FFE28A;
+        }
+
+        nav ul li a.logout-btn {
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.8) !important;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        nav ul li a.logout-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Hamburger (mobile) */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 6px 4px;
+            border: none;
+            background: transparent;
+            margin-left: 12px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 26px;
+            height: 2.5px;
+            background: #fff;
+            border-radius: 4px;
+            transition: var(--transition);
+            transform-origin: center;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ============================================================
+               PAGE LAYOUT
+               ============================================================ */
+        .page-layout {
+            flex: 1;
+            width: 94%;
+            max-width: 1400px;
+            margin: 28px auto 40px;
+            display: flex;
+            gap: 32px;
+            align-items: flex-start;
+        }
+
+        /* ============================================================
+               MAIN CONTENT – white cards, dark blue accents
+               ============================================================ */
+        .main-content {
+            flex: 3;
+            min-width: 0;
+        }
+
+        .main-content .card,
+        .main-content .section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 32px 36px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(11, 30, 78, 0.04);
+            transition: var(--transition);
+            margin-bottom: 24px;
+        }
+
+        .main-content .card:hover,
+        .main-content .section:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+            border-color: rgba(11, 30, 78, 0.08);
+        }
+
+        .main-content .card:last-child,
+        .main-content .section:last-child {
+            margin-bottom: 0;
+        }
+
+        .main-content .card h2,
+        .main-content .section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .main-content .card h2 i,
+        .main-content .section h2 i {
+            color: var(--primary);
+            font-size: 1.4rem;
+        }
+
+        .main-content .card p,
+        .main-content .section p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* ============================================================
+               SIDEBAR – white, dark blue accents
+               ============================================================ */
+        .sidebar {
+            flex: 1;
+            min-width: 240px;
+            max-width: 320px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 28px 20px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(11, 30, 78, 0.04);
+            position: sticky;
+            top: calc(var(--header-height) + 28px);
+            transition: var(--transition);
+        }
+
+        .sidebar:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .sidebar .sidebar-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            font-weight: 600;
+            padding: 0 12px 12px;
+            border-bottom: 1px solid rgba(11, 30, 78, 0.06);
+            margin-bottom: 16px;
+        }
+
+        .sidebar ul li a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+            margin-bottom: 2px;
+        }
+
+        .sidebar ul li a i {
+            width: 22px;
+            text-align: center;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .sidebar ul li a:hover {
+            background: rgba(11, 30, 78, 0.04);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .sidebar ul li a:hover i {
+            color: var(--primary);
+        }
+
+        .sidebar ul li a.active-link {
+            background: rgba(11, 30, 78, 0.06);
+            color: var(--primary);
+            border-left-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .sidebar ul li a.active-link i {
+            color: var(--primary);
+        }
+
+        .sidebar .badge {
+            margin-left: auto;
+            background: var(--primary);
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 50px;
+        }
+
+        /* ============================================================
+               FOOTER – dark blue, white text
+               ============================================================ */
+        footer {
+            background: var(--primary);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 32px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            margin-top: auto;
+        }
+
+        footer .container {
+            width: 94%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        footer .footer-brand {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: -0.02em;
+        }
+
+        footer .footer-brand span {
+            color: #FFD966;
+        }
+
+        footer p {
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+        footer .footer-links {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        footer .footer-links a {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+
+        footer .footer-links a:hover {
+            color: #fff;
+        }
+
+        footer .footer-social {
+            display: flex;
+            gap: 16px;
+            margin-top: 4px;
+        }
+
+        footer .footer-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.5);
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        footer .footer-social a:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ============================================================
+               RESPONSIVE
+               ============================================================ */
+        @media (max-width: 1024px) {
+            .page-layout {
+                gap: 24px;
+            }
+            .sidebar {
+                min-width: 200px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .page-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: static;
+                max-width: 100%;
+                width: 100%;
+                top: 0;
+            }
+
+            .main-content .card,
+            .main-content .section {
+                padding: 24px 20px;
+            }
+
+            /* Mobile nav */
+            nav ul {
+                position: absolute;
+                top: var(--header-height);
+                left: 0;
+                right: 0;
+                background: var(--primary-dark);
+                flex-direction: column;
+                padding: 20px 24px 28px;
+                gap: 4px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+                transform: translateY(-120%);
+                opacity: 0;
+                transition: var(--transition);
+                pointer-events: none;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            }
+
+            nav ul.open {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: all;
+            }
+
+            nav ul li a {
+                width: 100%;
+                padding: 12px 20px;
+                border-radius: var(--radius-sm);
+                justify-content: flex-start;
+            }
+
+            nav ul li a.auth-btn {
+                justify-content: center;
+                margin-top: 8px;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            #branding h1 {
+                font-size: 1rem;
+            }
+
+            #branding .logo-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --header-height: 64px;
+            }
+
+            .page-layout {
+                width: 96%;
+                margin: 16px auto 28px;
+                gap: 16px;
+            }
+
+            .main-content .card,
+            .main-content .section {
+                padding: 18px 16px;
+                border-radius: 16px;
+            }
+
+            .main-content .card h2,
+            .main-content .section h2 {
+                font-size: 1.2rem;
+            }
+
+            .sidebar {
+                padding: 20px 16px;
+                border-radius: 16px;
+            }
+
+            footer {
+                padding: 24px 0;
+            }
+
+            footer .footer-links {
+                gap: 14px;
+            }
+
+            #branding h1 {
+                font-size: 0.9rem;
+            }
+
+            #branding .logo-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            nav ul {
+                padding: 16px 16px 22px;
+            }
+
+            nav ul li a {
+                font-size: 0.8rem;
+                padding: 10px 16px;
+            }
+        }
+
+        /* ============================================================
+               UTILITY ANIMATIONS
+               ============================================================ */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-content .card,
+        .main-content .section,
+        .sidebar {
+            animation: fadeUp 0.6s ease forwards;
+        }
+
+        .sidebar {
+            animation-delay: 0.1s;
+        }
+
+        /* ============================================================
+               DJANGO MESSAGES / ALERTS
+               ============================================================ */
+        .messages {
+            margin-bottom: 20px;
+        }
+
+        .messages .alert {
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 4px solid transparent;
+            background: var(--card-bg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .messages .alert-success {
+            border-left-color: #2E7D32;
+            color: #1A4A1A;
+        }
+
+        .messages .alert-error {
+            border-left-color: #C62828;
+            color: #8E1A1A;
+        }
+
+        .messages .alert-info {
+            border-left-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .messages .alert-warning {
+            border-left-color: #F9A825;
+            color: #6D4C00;
+        }
+
+        /* ============================================================
+               OVERRIDE BLOCK STYLES
+               ============================================================ */
+        {% block style %}{% endblock %}
+    </style>
+</head>
+
+<body>
+    <!-- ============================================================
+    HEADER
+    ============================================================ -->
+    <header>
+        <div class="container">
+            <div id="branding">
+                <div class="logo-icon">
+                    <i class="fas fa-university"></i>
+                </div>
+                <h1><span class="highlight">Cavendish</span> University Sacco</h1>
+            </div>
+
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                            <i class="fas fa-home"></i> Home
+                        </a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                            <i class="fas fa-chart-pie"></i> Dashboard
+                        </a></li>
+                    <li><a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                            <i class="fas fa-user-circle"></i> Profile
+                        </a></li>
+                    {% if user.is_superuser %}
+                    <li><a href="{% url 'admin_dashboard' %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+                            <i class="fas fa-crown"></i> Admin
+                        </a></li>
+                    {% endif %}
+                    <li><a href="{% url 'logout' %}" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a></li>
+                    {% else %}
+                    <li><a href="{% url 'login' %}" class="auth-btn">
+                            <i class="fas fa-key"></i> Login
+                        </a></li>
+                    <li><a href="{% url 'register' %}" class="auth-btn" style="background: rgba(255,255,255,0.10); color: #fff !important; box-shadow: none; border: 1px solid rgba(255,255,255,0.15);">
+                            <i class="fas fa-user-plus"></i> Register
+                        </a></li>
+                    {% endif %}
+                </ul>
+
+                <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ============================================================
+    PAGE LAYOUT
+    ============================================================ -->
+    <div class="page-layout">
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% elif message.tags == 'info' %}fa-info-circle{% else %}fa-warning{% endif %}"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% block content %}
+            <!-- Default content if not overridden -->
+            <div class="card">
+                <h2><i class="fas fa-rocket"></i> Welcome to Cavendish Sacco</h2>
+                <p>Your trusted financial partner. Manage your savings, loans, and investments with ease.</p>
+            </div>
+            {% endblock %}
+        </main>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-title">
+                <i class="fas fa-compass" style="margin-right: 8px;"></i> Quick Navigation
+            </div>
+            {% block sidebar %}
+            <!-- Default sidebar links – child templates can override -->
+            <ul>
+                <li><a href="#" class="active-link"><i class="fas fa-credit-card"></i> My Accounts</a></li>
+                <li><a href="#"><i class="fas fa-hand-holding-usd"></i> Loans</a></li>
+                <li><a href="#"><i class="fas fa-piggy-bank"></i> Savings</a></li>
+                <li><a href="#"><i class="fas fa-chart-line"></i> Investments</a></li>
+                <li><a href="#"><i class="fas fa-file-invoice"></i> Transactions</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+            {% endblock %}
+        </aside>
+    </div>
+
+    <!-- ============================================================
+    FOOTER
+    ============================================================ -->
+    <footer>
+        <div class="container">
+            <div class="footer-brand">
+                <i class="fas fa-university" style="margin-right: 8px; opacity: 0.7;"></i>
+                <span>Cavendish</span> University Sacco
+            </div>
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Services</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+            <div class="footer-social">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p>&copy; {% now "Y" %} Cavendish University Sacco. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- ============================================================
+    SCRIPTS
+    ============================================================ -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ---------- HAMBURGER TOGGLE ----------
+            const hamburger = document.getElementById('hamburgerBtn');
+            const navMenu = document.getElementById('navMenu');
+
+            hamburger.addEventListener('click', function() {
+                this.classList.toggle('active');
+                navMenu.classList.toggle('open');
+            });
+
+            // Close menu on link click (mobile)
+            navMenu.querySelectorAll('a').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('open');
+                });
+            });
+
+            // Close menu on outside click (mobile)
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 900) {
+                    const header = document.querySelector('header');
+                    if (!header.contains(e.target) && navMenu.classList.contains('open')) {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('open');
+                    }
+                }
+            });
+
+            // ---------- SIDEBAR LINK ACTIVE STATE ----------
+            const sidebarLinks = document.querySelectorAll('.sidebar a');
+            const sections = document.querySelectorAll('.main-content .card, .main-content .section');
+
+            // If there are sections with IDs, handle show/hide
+            if (sections.length > 0 && sidebarLinks.length > 0) {
+                // Hide all sections initially
+                sections.forEach(function(section) {
+                    section.style.display = 'none';
+                });
+
+                // Show first section by default, or the one matching the first link's href
+                let firstTarget = null;
+                const firstLink = sidebarLinks[0];
+                if (firstLink && firstLink.getAttribute('href')) {
+                    const targetId = firstLink.getAttribute('href').substring(1);
+                    sections.forEach(function(section) {
+                        if (section.id === targetId) {
+                            firstTarget = section;
+                        }
+                    });
+                }
+                if (firstTarget) {
+                    firstTarget.style.display = 'block';
+                } else if (sections.length > 0) {
+                    sections[0].style.display = 'block';
+                }
+
+                // Click handler for sidebar links
+                sidebarLinks.forEach(function(link) {
+                    link.addEventListener('click', function(e) {
+                        const href = this.getAttribute('href');
+                        if (href && href.startsWith('#')) {
+                            e.preventDefault();
+                            const targetId = href.substring(1);
+
+                            // Update active class
+                            sidebarLinks.forEach(function(l) {
+                                l.classList.remove('active-link');
+                            });
+                            this.classList.add('active-link');
+
+                            // Show/hide sections
+                            sections.forEach(function(section) {
+                                if (section.id === targetId) {
+                                    section.style.display = 'block';
+                                } else {
+                                    section.style.display = 'none';
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+
+            // ---------- ADD ACTIVE CLASS TO CURRENT NAV LINK (based on URL) ----------
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('nav ul li a');
+            navLinks.forEach(function(link) {
+                const href = link.getAttribute('href');
+                if (href && href !== '#' && href !== '{% url "logout" %}' && href !== '{% url "login" %}' &&
+                    href !== '{% url "register" %}') {
+                    if (currentPath.includes(href) && href !== '/') {
+                        link.classList.add('active');
+                    }
+                }
+                if (href === '{% url "home" %}' && (currentPath === '/' || currentPath === '')) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+
+    <!-- Child template extra scripts -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,510 @@
+{% extends 'sacco/base.html' %}
+
+{% block title %}Dashboard - Cavendish University Sacco{% endblock %}
+
+{% block style %}
+{{ block.super }}
+<style>
+    /* ============================================================
+       DASHBOARD SPECIFIC STYLES
+       ============================================================ */
+
+    /* --- Welcome Header --- */
+    .welcome-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 6px;
+    }
+
+    .welcome-header h2 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .welcome-header h2 i {
+        color: var(--primary);
+    }
+
+    .welcome-badge {
+        background: var(--primary);
+        color: #fff;
+        padding: 6px 16px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+    }
+
+    /* --- Account Details Card --- */
+    .account-details-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-top: 4px;
+    }
+
+    .detail-item {
+        background: #f8fafc;
+        padding: 14px 18px;
+        border-radius: var(--radius-sm);
+        border: 1px solid rgba(11, 30, 78, 0.04);
+        transition: var(--transition);
+    }
+
+    .detail-item:hover {
+        border-color: rgba(11, 30, 78, 0.08);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .detail-item .label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--text-muted);
+        font-weight: 600;
+        display: block;
+        margin-bottom: 2px;
+    }
+
+    .detail-item .value {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .detail-item .value.highlight {
+        color: var(--primary);
+        font-size: 1.25rem;
+    }
+
+    /* --- Forms --- */
+    .form-fields p {
+        margin-bottom: 1.2rem;
+    }
+
+    .form-fields label {
+        display: block;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-bottom: 4px;
+    }
+
+    .form-fields input,
+    .form-fields select,
+    .form-fields textarea {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #e2e8f0;
+        border-radius: var(--radius-sm);
+        font-family: inherit;
+        font-size: 0.95rem;
+        transition: var(--transition);
+        background: #fff;
+        color: var(--text-primary);
+    }
+
+    .form-fields input:focus,
+    .form-fields select:focus,
+    .form-fields textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(11, 30, 78, 0.08);
+    }
+
+    .loan-form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .loan-form-grid input {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #e2e8f0;
+        border-radius: var(--radius-sm);
+        font-family: inherit;
+        font-size: 0.95rem;
+        transition: var(--transition);
+        background: #fff;
+        color: var(--text-primary);
+    }
+
+    .loan-form-grid input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(11, 30, 78, 0.08);
+    }
+
+    textarea {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #e2e8f0;
+        border-radius: var(--radius-sm);
+        font-family: inherit;
+        font-size: 0.95rem;
+        transition: var(--transition);
+        background: #fff;
+        color: var(--text-primary);
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(11, 30, 78, 0.08);
+    }
+
+    /* --- Buttons --- */
+    .btn {
+        padding: 10px 28px;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: var(--transition);
+        display: inline-block;
+        text-align: center;
+        text-decoration: none;
+        line-height: 1.4;
+    }
+
+    .btn-primary {
+        background: var(--primary);
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-outline {
+        background: transparent;
+        color: var(--primary);
+        border: 1px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+        background: var(--primary);
+        color: #fff;
+    }
+
+    /* --- Tables --- */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-top: 12px;
+        border-radius: var(--radius-sm);
+        border: 1px solid rgba(11, 30, 78, 0.04);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+        min-width: 500px;
+    }
+
+    th {
+        background: var(--primary);
+        color: #fff;
+        padding: 12px 16px;
+        text-align: left;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    td {
+        padding: 12px 16px;
+        border-bottom: 1px solid #edf2f7;
+        vertical-align: middle;
+        background-color: #fff;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover td {
+        background: #f8fafc;
+    }
+
+    /* --- Status Badges --- */
+    .status-badge {
+        display: inline-block;
+        padding: 4px 14px;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+    }
+
+    .status-badge.pending {
+        background: #FEF3C7;
+        color: #92400E;
+    }
+
+    .status-badge.approved {
+        background: #D1FAE5;
+        color: #065F46;
+    }
+
+    .status-badge.rejected {
+        background: #FEE2E2;
+        color: #991B1B;
+    }
+
+    .status-badge.paid {
+        background: #E0E7FF;
+        color: #3730A3;
+    }
+
+    /* --- Empty State --- */
+    .empty-state {
+        text-align: center;
+        padding: 20px;
+        color: var(--text-muted);
+        font-style: italic;
+    }
+
+    /* --- Loan Details --- */
+    .loan-details {
+        border-top: 2px solid #eee;
+        margin-top: 15px;
+        padding-top: 15px;
+    }
+
+    /* --- Mobile Tweaks --- */
+    @media (max-width: 600px) {
+        .welcome-header h2 {
+            font-size: 1.25rem;
+        }
+
+        .account-details-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .detail-item {
+            padding: 12px 14px;
+        }
+
+        .detail-item .value {
+            font-size: 0.95rem;
+        }
+
+        .detail-item .value.highlight {
+            font-size: 1.05rem;
+        }
+
+        .loan-form-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        table {
+            min-width: 400px;
+            font-size: 0.8rem;
+        }
+
+        th,
+        td {
+            padding: 10px 12px;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            font-size: 0.85rem;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .account-details-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <!-- WELCOME HEADER -->
+    <div class="welcome-header">
+        <h2><i class="fas fa-user-circle"></i> Welcome, {{ user.username }}!</h2>
+        <span class="welcome-badge"><i class="fas fa-check-circle"></i> Member</span>
+    </div>
+
+    <!-- ACCOUNT DETAILS -->
+    <div id="account-details" class="card">
+        <h3><i class="fas fa-id-card"></i> Your Account Details</h3>
+        <div class="account-details-grid">
+            <div class="detail-item">
+                <span class="label"><i class="fas fa-envelope"></i> Email</span>
+                <span class="value">{{ user.email }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label"><i class="fas fa-phone"></i> Phone Number</span>
+                <span class="value">{{ member.phone_number }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label"><i class="fas fa-id-badge"></i> Staff ID</span>
+                <span class="value">{{ member.staff_id }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="label"><i class="fas fa-wallet"></i> Savings Balance</span>
+                <span class="value highlight">UGX {{ member.account_balance }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- APPLY FOR LOAN -->
+    <div id="apply-loan" class="card">
+        <h3><i class="fas fa-hand-holding-usd"></i> Apply for a Loan</h3>
+        <form action="{% url 'apply_for_loan' %}" method="post">
+            {% csrf_token %}
+            <div class="loan-form-grid">
+                <input type="number" name="amount" placeholder="Loan Amount (UGX)" required step="0.01">
+                <input type="number" name="repayment_period" placeholder="Repayment Period (Months)" required>
+            </div>
+            <textarea name="reason" placeholder="Reason for loan" required></textarea>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Apply for Loan</button>
+        </form>
+    </div>
+
+    <!-- LOAN APPLICATIONS -->
+    <div id="loan-applications" class="card">
+        <h3><i class="fas fa-list-alt"></i> Your Loan Applications</h3>
+        {% for loan in loans %}
+            <div class="loan-details">
+                <h4>Loan of UGX {{ loan.amount }} applied on {{ loan.date_applied }}</h4>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Principal</th>
+                                <th>Interest ({{ loan.interest_rate }}%)</th>
+                                <th>Total Repayable</th>
+                                <th>Monthly Installment</th>
+                                <th>Outstanding Balance</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>UGX {{ loan.amount }}</td>
+                                <td>UGX {{ loan.total_interest|default:"N/A" }}</td>
+                                <td>UGX {{ loan.total_repayable|default:"N/A" }}</td>
+                                <td>UGX {{ loan.monthly_installment|default:"N/A" }}</td>
+                                <td>UGX {{ loan.balance }}</td>
+                                <td>
+                                    <span class="status-badge {{ loan.status|lower }}">
+                                        {{ loan.get_status_display }}
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h5>Repayment History</h5>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for repayment in loan.repayments.all %}
+                            <tr>
+                                <td>{{ repayment.date }}</td>
+                                <td>UGX {{ repayment.amount }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="2" class="empty-state">No repayments made yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% empty %}
+            <p class="empty-state">You have no loan applications.</p>
+        {% endfor %}
+    </div>
+
+    <!-- SAVINGS HISTORY -->
+    <div id="savings-history" class="card">
+        <h3><i class="fas fa-coins"></i> Your Savings History</h3>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for saving in savings %}
+                    <tr>
+                        <td>{{ saving.date }}</td>
+                        <td>UGX {{ saving.amount }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" class="empty-state">No savings recorded yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- INTEREST PAYOUTS -->
+    <div id="interest-payouts" class="card">
+        <h3><i class="fas fa-percent"></i> Interest Payouts</h3>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payout in interest_payouts %}
+                    <tr>
+                        <td>{{ payout.date }}</td>
+                        <td>UGX {{ payout.amount }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" class="empty-state">No interest payouts yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    <ul>
+        <li><a href="#account-details"><i class="fas fa-id-card"></i> Account Details</a></li>
+        <li><a href="#apply-loan"><i class="fas fa-hand-holding-usd"></i> Apply for a Loan</a></li>
+        <li><a href="#loan-applications"><i class="fas fa-list-alt"></i> Loan Applications</a></li>
+        <li><a href="#savings-history"><i class="fas fa-coins"></i> Savings History</a></li>
+        <li><a href="#interest-payouts"><i class="fas fa-percent"></i> Interest Payouts</a></li>
+    </ul>
+{% endblock %}

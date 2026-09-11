@@ -1,0 +1,302 @@
+
+{% extends 'sacco/base.html' %}
+
+{% block title %}Home - Cavendish University Sacco{% endblock %}
+
+{% block style %}
+{{ block.super }}
+<style>
+    /* ============================================================
+       HERO / SHOWCASE
+       ============================================================ */
+    #showcase {
+        position: relative;
+        min-height: 520px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #fff;
+        padding: 60px 20px;
+        background: var(--primary);
+        border-radius: var(--radius);
+        overflow: hidden;
+        margin-bottom: 0;
+        /* Override any previous margin */
+    }
+
+    /* Background image with dark overlay */
+    #showcase::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: url('https://www.cavendish.ac.ug/wp-content/uploads/2022/05/IMG_2705-scaled.jpg') no-repeat center center / cover;
+        opacity: 0.35;
+        z-index: 0;
+    }
+
+    /* Gradient overlay for better readability */
+    #showcase::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(11, 30, 78, 0.85) 0%, rgba(11, 30, 78, 0.40) 100%);
+        z-index: 1;
+    }
+
+    #showcase .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 720px;
+        padding: 20px;
+    }
+
+    #showcase h1 {
+        font-size: 3.2rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin: 0 0 16px;
+        line-height: 1.15;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    #showcase h1 .highlight {
+        color: #FFD966;
+    }
+
+    #showcase p {
+        font-size: 1.2rem;
+        margin: 0 0 30px;
+        opacity: 0.9;
+        font-weight: 400;
+        line-height: 1.6;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+    }
+
+    .hero-buttons .btn {
+        padding: 12px 36px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 50px;
+        text-decoration: none;
+        transition: var(--transition);
+        display: inline-block;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        border: none;
+        cursor: pointer;
+    }
+
+    .hero-buttons .btn-primary {
+        background: #FFD966;
+        color: var(--primary);
+    }
+
+    .hero-buttons .btn-primary:hover {
+        background: #FFE28A;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(255, 217, 102, 0.35);
+    }
+
+    .hero-buttons .btn-outline-light {
+        background: transparent;
+        color: #fff;
+        border: 2px solid rgba(255, 255, 255, 0.6);
+        box-shadow: none;
+    }
+
+    .hero-buttons .btn-outline-light:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: #fff;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ============================================================
+       RESPONSIVE TWEAKS
+       ============================================================ */
+    @media (max-width: 768px) {
+        #showcase {
+            min-height: 400px;
+            padding: 40px 16px;
+            border-radius: var(--radius-sm);
+        }
+
+        #showcase h1 {
+            font-size: 2.2rem;
+        }
+
+        #showcase p {
+            font-size: 1rem;
+            margin-bottom: 24px;
+        }
+
+        .hero-buttons .btn {
+            padding: 10px 28px;
+            font-size: 0.9rem;
+            min-width: 140px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        #showcase {
+            min-height: 320px;
+            padding: 30px 12px;
+        }
+
+        #showcase h1 {
+            font-size: 1.7rem;
+        }
+
+        #showcase p {
+            font-size: 0.9rem;
+        }
+
+        .hero-buttons {
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hero-buttons .btn {
+            width: 100%;
+            max-width: 220px;
+            padding: 10px 20px;
+            font-size: 0.85rem;
+        }
+    }
+
+    /* ============================================================
+       EXTRA: Small extra info section (optional, but we keep clean)
+       ============================================================ */
+    .home-features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 24px;
+        margin-top: 32px;
+    }
+
+    .feature-item {
+        background: var(--card-bg);
+        padding: 24px 20px;
+        border-radius: var(--radius-sm);
+        text-align: center;
+        border: 1px solid rgba(11, 30, 78, 0.04);
+        transition: var(--transition);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .feature-item:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+        border-color: rgba(11, 30, 78, 0.08);
+    }
+
+    .feature-item i {
+        font-size: 2.2rem;
+        color: var(--primary);
+        margin-bottom: 12px;
+        display: block;
+    }
+
+    .feature-item h4 {
+        font-weight: 700;
+        margin: 0 0 8px;
+        color: var(--text-primary);
+    }
+
+    .feature-item p {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        margin: 0;
+    }
+
+    @media (max-width: 480px) {
+        .home-features {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <!-- HERO SECTION -->
+    <section id="showcase">
+        <div class="hero-content">
+            <h1>Welcome to <span class="highlight">Cavendish</span> University Sacco</h1>
+            <p>Your partner in financial growth and stability. Save, invest, and borrow with confidence.</p>
+            {% if not user.is_authenticated %}
+                <div class="hero-buttons">
+                    <a href="{% url 'login' %}" class="btn btn-primary"><i class="fas fa-key"></i> Login</a>
+                    <a href="{% url 'register' %}" class="btn btn-outline-light"><i class="fas fa-user-plus"></i> Register</a>
+                </div>
+            {% else %}
+                <div class="hero-buttons">
+                    <a href="{% url 'dashboard' %}" class="btn btn-primary"><i class="fas fa-chart-pie"></i> Go to Dashboard</a>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- OPTIONAL FEATURES SECTION – makes the page richer -->
+    <div class="home-features">
+        <div class="feature-item">
+            <i class="fas fa-piggy-bank"></i>
+            <h4>Savings</h4>
+            <p>Grow your wealth with competitive interest rates.</p>
+        </div>
+        <div class="feature-item">
+            <i class="fas fa-hand-holding-usd"></i>
+            <h4>Loans</h4>
+            <p>Access affordable credit when you need it most.</p>
+        </div>
+        <div class="feature-item">
+            <i class="fas fa-chart-line"></i>
+            <h4>Investments</h4>
+            <p>Smart investment options for a secure future.</p>
+        </div>
+        <div class="feature-item">
+            <i class="fas fa-shield-alt"></i>
+            <h4>Security</h4>
+            <p>Your financial data is safe with us.</p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    <!-- Override sidebar to be empty or show a call-to-action -->
+    <div class="sidebar" style="background: transparent; box-shadow: none; border: none; padding: 0;">
+        <div style="background: var(--card-bg); border-radius: var(--radius); padding: 24px 20px; box-shadow: var(--shadow-sm); border: 1px solid rgba(11,30,78,0.04);">
+            <h4 style="margin-top: 0; display: flex; align-items: center; gap: 10px; color: var(--text-primary);">
+                <i class="fas fa-info-circle" style="color: var(--primary);"></i> Quick Info
+            </h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 16px;">
+                Cavendish University Sacco is a member-owned financial cooperative dedicated to serving the university community.
+            </p>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: 8px 0; border-bottom: 1px solid rgba(11,30,78,0.04); display: flex; gap: 12px; align-items: center;">
+                    <i class="fas fa-calendar-check" style="color: var(--primary); width: 20px;"></i>
+                    <span style="font-size: 0.9rem;">Est. 2020</span>
+                </li>
+                <li style="padding: 8px 0; border-bottom: 1px solid rgba(11,30,78,0.04); display: flex; gap: 12px; align-items: center;">
+                    <i class="fas fa-users" style="color: var(--primary); width: 20px;"></i>
+                    <span style="font-size: 0.9rem;">{{ total_members|default:"500+" }} Members</span>
+                </li>
+                <li style="padding: 8px 0; display: flex; gap: 12px; align-items: center;">
+                    <i class="fas fa-phone" style="color: var(--primary); width: 20px;"></i>
+                    <span style="font-size: 0.9rem;">+256 700 000 000</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

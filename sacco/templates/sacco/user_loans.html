@@ -1,0 +1,356 @@
+
+{% extends 'sacco/base.html' %}
+
+{% block title %}Loans for {{ member.user.username }} - Cavendish University Sacco{% endblock %}
+
+{% block style %}
+{{ block.super }}
+<style>
+    /* ============================================================
+       LOANS DETAIL PAGE STYLES
+       ============================================================ */
+
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .page-header h2 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin: 0;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .page-header h2 i {
+        color: var(--primary);
+    }
+
+    .page-header .member-badge {
+        background: var(--primary);
+        color: #fff;
+        padding: 6px 18px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(11, 30, 78, 0.15);
+    }
+
+    .page-header .member-badge i {
+        font-size: 0.9rem;
+    }
+
+    /* Loan details card */
+    .loan-details-card {
+        background: var(--card-bg);
+        border-radius: var(--radius);
+        padding: 28px 24px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid rgba(11, 30, 78, 0.04);
+        transition: var(--transition);
+        margin-bottom: 20px;
+    }
+
+    .loan-details-card:hover {
+        box-shadow: var(--shadow-md);
+        border-color: rgba(11, 30, 78, 0.08);
+    }
+
+    .loan-details-card h4 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 0 0 16px 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .loan-details-card h4 i {
+        color: var(--primary);
+    }
+
+    .loan-details-card h5 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin: 20px 0 8px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .loan-details-card h5 i {
+        color: var(--primary);
+    }
+
+    .loan-details-card .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-top: 4px;
+        border-radius: var(--radius-sm);
+        border: 1px solid rgba(11, 30, 78, 0.04);
+    }
+
+    .loan-details-card table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+        min-width: 700px;
+    }
+
+    .loan-details-card th {
+        background: var(--primary);
+        color: #fff;
+        padding: 12px 16px;
+        text-align: left;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .loan-details-card td {
+        padding: 12px 16px;
+        border-bottom: 1px solid #edf2f7;
+        vertical-align: middle;
+        background-color: #fff;
+    }
+
+    .loan-details-card tr:last-child td {
+        border-bottom: none;
+    }
+
+    .loan-details-card tr:hover td {
+        background: #f8fafc;
+    }
+
+    .loan-details-card .empty-state {
+        text-align: center;
+        padding: 24px;
+        color: var(--text-muted);
+        font-style: italic;
+        background: #fafafa;
+        border-radius: var(--radius-sm);
+    }
+
+    .loan-details-card .empty-state i {
+        font-size: 1.5rem;
+        display: block;
+        margin-bottom: 6px;
+        opacity: 0.5;
+    }
+
+    /* Status badges */
+    .status-badge {
+        display: inline-block;
+        padding: 4px 14px;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+    }
+
+    .status-badge.pending { background: #FEF3C7; color: #92400E; }
+    .status-badge.approved { background: #D1FAE5; color: #065F46; }
+    .status-badge.rejected { background: #FEE2E2; color: #991B1B; }
+    .status-badge.paid { background: #E0E7FF; color: #3730A3; }
+    .status-badge.disbursed { background: #DBEAFE; color: #1E40AF; }
+    .status-badge.repaid { background: #E0E7FF; color: #3730A3; }
+    .status-badge.defaulted { background: #FEE2E2; color: #991B1B; }
+
+    /* Back button */
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+        padding: 10px 24px;
+        background: var(--primary);
+        color: #fff;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        transition: var(--transition);
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        box-shadow: 0 4px 12px rgba(11, 30, 78, 0.12);
+    }
+
+    .back-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        color: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+        .page-header h2 {
+            font-size: 1.3rem;
+        }
+
+        .loan-details-card {
+            padding: 20px 16px;
+            border-radius: var(--radius-sm);
+        }
+
+        .loan-details-card table {
+            min-width: 600px;
+            font-size: 0.85rem;
+        }
+
+        .loan-details-card th,
+        .loan-details-card td {
+            padding: 10px 12px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .page-header h2 {
+            font-size: 1.1rem;
+        }
+
+        .page-header .member-badge {
+            font-size: 0.75rem;
+            padding: 4px 14px;
+        }
+
+        .loan-details-card {
+            padding: 16px 12px;
+        }
+
+        .loan-details-card h4 {
+            font-size: 1rem;
+        }
+
+        .loan-details-card h5 {
+            font-size: 0.9rem;
+        }
+
+        .loan-details-card table {
+            min-width: 480px;
+            font-size: 0.8rem;
+        }
+
+        .loan-details-card th,
+        .loan-details-card td {
+            padding: 8px 10px;
+        }
+
+        .back-btn {
+            width: 100%;
+            justify-content: center;
+            padding: 12px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>
+        <i class="fas fa-hand-holding-usd"></i>
+        Loans for {{ member.user.username }}
+    </h2>
+    <span class="member-badge">
+        <i class="fas fa-id-badge"></i> Staff ID: {{ member.staff_id }}
+    </span>
+</div>
+
+{% for loan in loans %}
+<div class="loan-details-card">
+    <h4>
+        <i class="fas fa-file-invoice"></i>
+        Loan of UGX {{ loan.amount }} applied on {{ loan.date_applied }}
+    </h4>
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Principal</th>
+                    <th>Interest ({{ loan.interest_rate }}%)</th>
+                    <th>Total Repayable</th>
+                    <th>Monthly Installment</th>
+                    <th>Outstanding Balance</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>UGX {{ loan.amount }}</td>
+                    <td>UGX {{ loan.total_interest|default:"N/A" }}</td>
+                    <td>UGX {{ loan.total_repayable|default:"N/A" }}</td>
+                    <td>UGX {{ loan.monthly_installment|default:"N/A" }}</td>
+                    <td>UGX {{ loan.balance }}</td>
+                    <td>
+                        <span class="status-badge {{ loan.status|lower }}">
+                            {{ loan.get_status_display }}
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h5>
+        <i class="fas fa-history"></i>
+        Repayment History
+    </h5>
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for repayment in loan.repayments.all %}
+                <tr>
+                    <td>{{ repayment.date }}</td>
+                    <td>UGX {{ repayment.amount }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2" class="empty-state">
+                        <i class="fas fa-info-circle"></i>
+                        No repayments made yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% empty %}
+<div class="loan-details-card">
+    <div class="empty-state">
+        <i class="fas fa-info-circle"></i>
+        This member has no loans.
+    </div>
+</div>
+{% endfor %}
+
+<a href="{% url 'admin_dashboard' %}" class="back-btn">
+    <i class="fas fa-arrow-left"></i> Back to Admin Dashboard
+</a>
+{% endblock %}
+
+{% block sidebar %}
+<!-- Sidebar hidden for this view for cleaner focus -->
+{% endblock %}
