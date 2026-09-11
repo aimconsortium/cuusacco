@@ -701,6 +701,36 @@
         }
 
         /* ============================================================
+               PASSWORD VISIBILITY TOGGLE
+               ============================================================ */
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 42px !important;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 1rem;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+        }
+
+        /* ============================================================
                OVERRIDE BLOCK STYLES
                ============================================================ */
     </style>
@@ -835,6 +865,20 @@
     SCRIPTS
     ============================================================ -->
     <script>
+        function togglePasswordVisibility(btn) {
+            const input = btn.parentElement.querySelector('input');
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             // ---------- HAMBURGER TOGGLE ----------
             const hamburger = document.getElementById('hamburgerBtn');
